@@ -4,7 +4,7 @@ commonLabels:
   owner: cfa
 
 commonAnnotations:
-  cfa-base-version: v1.25
+  cfa-base-version: v0.1.0
 
 resources:
 - deploy.yaml

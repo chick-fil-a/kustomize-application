@@ -3,7 +3,7 @@ kind: ServiceAccount
 metadata:
   annotations:
     cfa-base-name: java-api
-    cfa-base-version: v1.25
+    cfa-base-version: v0.1.0
     cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
   labels:
     app: my-java-api
@@ -17,7 +17,7 @@ kind: Service
 metadata:
   annotations:
     cfa-base-name: java-api
-    cfa-base-version: v1.25
+    cfa-base-version: v0.1.0
     cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
   labels:
     app: my-java-api
@@ -42,7 +42,7 @@ kind: Deployment
 metadata:
   annotations:
     cfa-base-name: java-api
-    cfa-base-version: v1.25
+    cfa-base-version: v0.1.0
     cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
   labels:
     app: my-java-api
@@ -65,7 +65,7 @@ spec:
     metadata:
       annotations:
         cfa-base-name: java-api
-        cfa-base-version: v1.25
+        cfa-base-version: v0.1.0
         cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
         prometheus.io/scrape: "true"
       labels:
@@ -136,7 +136,7 @@ kind: PodDisruptionBudget
 metadata:
   annotations:
     cfa-base-name: java-api
-    cfa-base-version: v1.25
+    cfa-base-version: v0.1.0
     cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
   labels:
     app: my-java-api
@@ -157,7 +157,7 @@ kind: HorizontalPodAutoscaler
 metadata:
   annotations:
     cfa-base-name: java-api
-    cfa-base-version: v1.25
+    cfa-base-version: v0.1.0
     cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
   labels:
     app: my-java-api
@@ -183,7 +183,7 @@ kind: ServiceMonitor
 metadata:
   annotations:
     cfa-base-name: java-api
-    cfa-base-version: v1.25
+    cfa-base-version: v0.1.0
     cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
   labels:
     app: my-java-api
