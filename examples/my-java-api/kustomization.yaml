@@ -12,5 +12,5 @@ namespace: my-java-api
 
 images:
 - name: application-image-placeholder
-  newName: cfa-docker.jfrog.io/my-java-api
-  newTag: v0.0.1
+  newName: busybox
+  newTag: latest

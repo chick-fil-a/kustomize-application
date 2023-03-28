@@ -85,7 +85,7 @@ spec:
             configMapKeyRef:
               key: ENV_NAME
               name: env-region-cm
-        image: cfa-docker.jfrog.io/my-go-api:v0.0.1
+        image: busybox:latest
         imagePullPolicy: Always
         livenessProbe:
           httpGet:

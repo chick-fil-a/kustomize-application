@@ -12,8 +12,8 @@ namespace: my-k8s-api
 
 images:
 - name: application-image-placeholder
-  newName: cfa-docker.jfrog.io/my-python-api
-  newTag: v0.0.1
+  newName: busybox
+  newTag: latest
 
 patches:
 - target:
