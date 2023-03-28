@@ -1,0 +1,16 @@
+bases:
+- https://github.com/chick-fil-a/kustomize-application/java-api?ref=main
+
+commonLabels:
+  app: my-java-api
+
+commonAnnotations:
+  cm.chick-fil-a.com/system-tag: "CAP_BLOG_POST"
+
+namePrefix: my-java-api-
+namespace: my-java-api
+
+images:
+- name: application-image-placeholder
+  newName: cfa-docker.jfrog.io/my-java-api
+  newTag: v0.0.1

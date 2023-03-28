@@ -1,0 +1,21 @@
+bases:
+- https://github.com/chick-fil-a/kustomize-application/python-api?ref=main
+
+commonLabels:
+  app: my-k8s-api
+
+commonAnnotations:
+  cm.chick-fil-a.com/system-tag: "CAP_BLOG_POST"
+
+namePrefix: my-k8s-api-
+namespace: my-k8s-api
+
+images:
+- name: application-image-placeholder
+  newName: cfa-docker.jfrog.io/my-python-api
+  newTag: v0.0.1
+
+patches:
+- target:
+    kind: Deployment
+  path: patches/deploy.yaml

@@ -1,0 +1,195 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    cfa-base-name: python-api
+    cfa-base-version: v1.25
+    cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
+  labels:
+    app: my-k8s-api
+    owner: cfa
+    tier: backend
+  name: my-k8s-api-sa
+  namespace: my-k8s-api
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cfa-base-name: python-api
+    cfa-base-version: v1.25
+    cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
+  labels:
+    app: my-k8s-api
+    owner: cfa
+    tier: backend
+  name: my-k8s-api-service
+  namespace: my-k8s-api
+spec:
+  ports:
+  - name: app-port
+    port: 80
+    protocol: TCP
+    targetPort: app-port
+  selector:
+    app: my-k8s-api
+    owner: cfa
+    tier: backend
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    cfa-base-name: python-api
+    cfa-base-version: v1.25
+    cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
+  labels:
+    app: my-k8s-api
+    owner: cfa
+    tier: backend
+  name: my-k8s-api-deployment
+  namespace: my-k8s-api
+spec:
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: my-k8s-api
+      owner: cfa
+      tier: backend
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        cfa-base-name: python-api
+        cfa-base-version: v1.25
+        cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
+        prometheus.io/scrape: "true"
+      labels:
+        app: my-k8s-api
+        owner: cfa
+        tier: backend
+    spec:
+      containers:
+      - env:
+        - name: AWS_REGION
+          valueFrom:
+            configMapKeyRef:
+              key: AWS_REGION
+              name: env-region-cm
+        - name: ENV_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: ENV_NAME
+              name: env-region-cm
+        image: cfa-docker.jfrog.io/my-python-api:v0.0.1
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        name: my-k8s-api-application-container
+        ports:
+        - containerPort: 8080
+          name: app-port
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 200m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+      imagePullSecrets:
+      - name: artifactory-docker
+      serviceAccountName: my-k8s-api-sa
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  annotations:
+    cfa-base-name: python-api
+    cfa-base-version: v1.25
+    cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
+  labels:
+    app: my-k8s-api
+    owner: cfa
+    tier: backend
+  name: my-k8s-api-pdb
+  namespace: my-k8s-api
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: my-k8s-api
+      owner: cfa
+      tier: backend
+---
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  annotations:
+    cfa-base-name: python-api
+    cfa-base-version: v1.25
+    cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
+  labels:
+    app: my-k8s-api
+    owner: cfa
+    tier: backend
+  name: my-k8s-api-hpa
+  namespace: my-k8s-api
+spec:
+  maxReplicas: 10
+  metrics:
+  - resource:
+      name: cpu
+      targetAverageUtilization: 80
+    type: Resource
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-k8s-api-deployment
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations:
+    cfa-base-name: python-api
+    cfa-base-version: v1.25
+    cm.chick-fil-a.com/system-tag: CAP_BLOG_POST
+  labels:
+    app: my-k8s-api
+    owner: cfa
+    prometheus-enabled: "true"
+    release: prometheus-operator
+    tier: backend
+  name: my-k8s-api-servicemonitor
+  namespace: my-k8s-api
+spec:
+  endpoints:
+  - interval: 30s
+    path: /prometheus
+    port: app-port
+    scheme: http
+  namespaceSelector:
+    matchNames:
+    - my-k8s-api
+  selector:
+    matchLabels:
+      app: my-k8s-api
+      owner: cfa
+      tier: backend
