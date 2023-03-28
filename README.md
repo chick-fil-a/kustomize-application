@@ -4,7 +4,7 @@ Example `kustomize` feeder repository for applications.
 
 ## Resources
 
-* Chick-fil-A Tech Blog: <>
+* [Chick-fil-A Tech Blog](https://medium.com/chick-fil-atech/writing-kubernetes-manifests-with-kustomize-feeder-repository-b67b0be7ad2e)
 
 ## Introduction
 
