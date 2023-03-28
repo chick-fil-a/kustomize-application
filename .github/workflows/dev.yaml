@@ -1,0 +1,41 @@
+name: dev
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  dev:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get repo
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Install kubeval, kustomize
+      run: |
+        curl -sL \
+          https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz | tar xz
+        chmod +x kubeval
+        mv kubeval /usr/local/bin
+
+        curl -sL \
+          https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v3.8.9/kustomize_v3.8.9_linux_amd64.tar.gz | tar xz
+        chmod +x kustomize
+        mv kustomize /usr/local/bin
+
+        kubeval --version
+        kustomize version
+
+    - name: Check layers
+      run: |
+        for dirname in base backend frontend go-api java-api python-api "examples/my-go-api" "examples/my-java-api" "examples/my-python-api"; do
+          echo "checking ${dirname}..."
+          kustomize build ${dirname} | kubeval --ignore-missing-schemas
+          if [[ $? != 0 ]]; then
+            echo "error"
+            exit 1
+          fi 
+          echo
+        done
