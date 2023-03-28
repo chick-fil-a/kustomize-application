@@ -1,0 +1,8 @@
+bases:
+- ../base
+
+commonLabels:
+  tier: backend
+
+commonAnnotations:
+  cfa-base-name: backend

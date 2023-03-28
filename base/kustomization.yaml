@@ -1,0 +1,35 @@
+namespace: default
+
+commonLabels:
+  owner: cfa
+
+commonAnnotations:
+  cfa-base-version: v1.25
+
+resources:
+- deploy.yaml
+- hpa.yaml
+- pdb.yaml
+- sa.yaml
+- smon.yaml
+- svc.yaml
+
+vars:
+- name: SVC_NAME
+  objref:
+    kind: Service
+    name: service
+    apiVersion: v1
+  fieldref:
+    fieldpath: metadata.name
+- name: SVC_NAMESPACE
+  objref:
+    kind: Service
+    name: service
+    apiVersion: v1
+  fieldref:
+    fieldpath: metadata.namespace
+
+configurations:
+- conf/smon.yaml
+- conf/transformers.yaml

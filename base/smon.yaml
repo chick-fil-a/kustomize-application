@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: servicemonitor
+  labels:
+    prometheus-enabled: "true"
+    release: prometheus-operator
+spec:
+  namespaceSelector:
+    matchNames:
+    - $(SVC_NAMESPACE)
+  endpoints:
+  - port: app-port
+    interval: 30s
+    scheme: http
+    path: /prometheus

@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    tier: application
+  name: deployment
+spec:
+  revisionHistoryLimit: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+    spec:
+      terminationGracePeriodSeconds: 30
+      serviceAccountName: sa
+      containers:
+      - name: application-container
+        image: application-image-placeholder:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        ports:
+        - containerPort: 8080
+          name: app-port
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 2048Mi
+          requests:
+            cpu: 1000m
+            memory: 1024Mi
+        env:
+        - name: AWS_REGION
+          valueFrom:
+            configMapKeyRef:
+              key: AWS_REGION
+              name: env-region-cm
+        - name: ENV_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: ENV_NAME
+              name: env-region-cm
+      imagePullSecrets:
+      - name: artifactory-docker

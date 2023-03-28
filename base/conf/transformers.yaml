@@ -1,0 +1,13 @@
+varReference:
+- path: metadata/annotations/getambassador.io\/config
+  kind: Service
+- path: spec/service
+  kind: Mapping
+- path: spec/template/spec/containers[]/env[]/value
+  kind: Deployment
+- path: spec/namespaceSelector/matchNames[]
+  kind: ServiceMonitor
+
+namePrefix:
+- path: spec/template/spec/containers/name
+- path: spec/jobTemplate/spec/template/spec/containers/name

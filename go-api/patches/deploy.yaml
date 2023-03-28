@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+spec:
+  revisionHistoryLimit: 2
+  template:
+    spec:
+      containers:
+      - name: application-container
+        image: application-image-placeholder:latest
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /healthz
+          initialDelaySeconds: 10
+          timeoutSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /readyz
+          initialDelaySeconds: 10
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+          requests:
+            cpu: 500m
+            memory: 256Mi

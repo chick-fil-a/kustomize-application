@@ -1,0 +1,13 @@
+bases:
+- ../backend
+
+commonAnnotations:
+  cfa-base-name: java-api
+
+patches:
+- target:
+    kind: Deployment
+  path: patches/deploy.yaml
+- target:
+    kind: HorizontalPodAutoscaler
+  path: patches/hpa.yaml

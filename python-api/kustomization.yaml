@@ -1,0 +1,6 @@
+bases:
+- ../backend
+
+commonAnnotations:
+  cfa-base-name: python-api
+

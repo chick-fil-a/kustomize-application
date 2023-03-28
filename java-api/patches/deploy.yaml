@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+spec:
+  template:
+    spec:
+      terminationGracePeriodSeconds: 120
+      containers:
+      - name: application-container
+        env:
+        - name: spring.profiles.active
+          valueFrom:
+            configMapKeyRef:
+              key: spring.profiles.active
+              name: env-region-cm
+        - name: spring.application.name
+          value: $(SVC_NAME)
+        volumeMounts:
+          - name: config-volume-keys
+            mountPath: /etc/dxe/config/keys
+      volumes:
+      - name: config-volume-keys
+        configMap:
+          name: dxe-config-keys
